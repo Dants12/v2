@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dual Crash Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="top-bar">
+        <div class="brand-group">
+          <span class="brand">Crash Demo</span>
+          <span class="pill pill-live">Live</span>
+          <span class="pill pill-mode">CRASH</span>
+        </div>
+        <div class="session-controls">
+          <button id="startRound" class="primary">Start round</button>
+          <button id="cashOut" class="secondary" disabled>Cash out</button>
+          <div class="round-status">
+            <span class="label">Round</span>
+            <span id="roundId" class="value">—</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="sidebar">
+          <article class="card">
+            <header class="card-header">
+              <h2>Wallet &amp; Mode</h2>
+              <span class="badge">Auto</span>
+            </header>
+            <div class="card-body grid">
+              <div>
+                <p class="label">Balance</p>
+                <p class="value" id="walletBalance">$741.77</p>
+              </div>
+              <div>
+                <p class="label">Target</p>
+                <p class="value">x1.80</p>
+              </div>
+              <div class="grid-span">
+                <button class="ghost" data-add="5">+5</button>
+                <button class="ghost" data-add="25">+25</button>
+                <button class="ghost" data-add="100">+100</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <header class="card-header">
+              <h2>Main bet</h2>
+              <span class="badge">Safe</span>
+            </header>
+            <div class="card-body">
+              <div class="stack">
+                <label class="label" for="betAmount">Amount</label>
+                <div class="input-group">
+                  <input id="betAmount" type="number" min="1" value="50" />
+                  <div class="input-buttons">
+                    <button class="ghost" data-fill="25">25</button>
+                    <button class="ghost" data-fill="100">100</button>
+                    <button class="ghost" data-fill="250">250</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <header class="card-header">
+              <h2>Micro-bets</h2>
+              <span class="badge">2 slots</span>
+            </header>
+            <div class="card-body micro-bets">
+              <div class="micro-bet">
+                <div class="micro-label">A</div>
+                <div class="micro-body">
+                  <div class="micro-row">
+                    <span>Speed</span>
+                    <span class="value">x1.25</span>
+                  </div>
+                  <div class="micro-row">
+                    <span>Defense</span>
+                    <span class="value">x0.90</span>
+                  </div>
+                </div>
+              </div>
+              <div class="micro-bet">
+                <div class="micro-label">B</div>
+                <div class="micro-body">
+                  <div class="micro-row">
+                    <span>Speed</span>
+                    <span class="value">x1.05</span>
+                  </div>
+                  <div class="micro-row">
+                    <span>Defense</span>
+                    <span class="value">x1.10</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="arena">
+          <header class="card-header">
+            <div>
+              <h2>Dual Crash · Arena</h2>
+              <p class="label">Risk guard: Safe</p>
+            </div>
+            <div class="badge-row">
+              <span class="badge">2 lanes</span>
+              <span class="badge">Auto cash</span>
+            </div>
+          </header>
+          <div class="canvas-wrapper">
+            <canvas id="arenaCanvas" width="640" height="380" role="img" aria-label="Dual crash graph"></canvas>
+            <div class="rocket" id="rocket">🚀</div>
+            <div class="arena-overlay">
+              <div>
+                <p class="label">Multiplier</p>
+                <p id="currentMultiplier" class="arena-value">x1.00</p>
+              </div>
+              <div>
+                <p class="label">Second curve</p>
+                <p id="secondaryMultiplier" class="arena-value">x1.00</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar right">
+          <article class="card">
+            <header class="card-header">
+              <h2>Investor panel</h2>
+              <span class="badge">Live</span>
+            </header>
+            <div class="card-body investor">
+              <div class="investor-row">
+                <span>Liability</span>
+                <span class="value" id="liability">$0.00</span>
+              </div>
+              <div class="investor-row">
+                <span>RTP (avg)</span>
+                <span class="value">98.2%</span>
+              </div>
+              <div class="investor-row">
+                <span>Max round</span>
+                <span class="value" id="maxRound">x0.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <header class="card-header">
+              <h2>Round totals</h2>
+              <span class="badge">CRASH</span>
+            </header>
+            <div class="card-body round-totals">
+              <div class="row">
+                <span class="label">Main bet</span>
+                <span id="mainBet" class="value">$0.00</span>
+              </div>
+              <div class="row">
+                <span class="label">Micro bets</span>
+                <span id="microTotal" class="value">$0.00</span>
+              </div>
+              <div class="row">
+                <span class="label">Returned</span>
+                <span id="returned" class="value">$0.00</span>
+              </div>
+              <div class="row">
+                <span class="label">Payout</span>
+                <span id="payout" class="value">$0.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <header class="card-header">
+              <h2>Events</h2>
+              <span class="badge">Live feed</span>
+            </header>
+            <div id="eventFeed" class="card-body events" aria-live="polite"></div>
+          </article>
+        </aside>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
