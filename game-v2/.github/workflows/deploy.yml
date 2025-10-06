@@ -1,14 +1,20 @@
-name: Deploy
+name: Deploy to VPS
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]   # или твоя ветка
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Sync files
+
+      - name: Add known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${{ secrets.SSH_PORT || '22' }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Sync files to VPS
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avzr --delete
@@ -17,11 +23,14 @@ jobs:
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
+          remote_port: ${{ secrets.SSH_PORT }}
+
       - name: Remote build & restart
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             bash /srv/game-v2/scripts/deploy.sh
